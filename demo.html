@@ -1,0 +1,119 @@
+<!doctype>
+<html>
+<head>
+    <title>pluie.org - svan demo - v0.4</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+    body        { background-color:#888; color:white; font-family:arial; font-size:1.3rem; }
+    #test       { border: 1px dashed #ccc; }
+    body > div  { border-radius:20px; margin:40px; padding:20px; background-color: #ccc; color:black; }
+    body > span { font-size:0.8rem; }
+    button      { padding:5px 15px; }
+    h3          { margin:35px 0 10px 0; }
+    h2          { margin:5px 0 0 0; }
+    textarea    { padding:8px 5px; border-radius:10px; border-style:solid; width:100%; height:120px; font-size:1.2rem; }
+    #test       { margin:20px; background-color:white; padding:20px; border: 1px dashed #aaa; }
+    .cssAdded   { color:#990000; }
+    </style>
+</head>
+<body>
+<h2>pluie.org - svan demo : </h2>
+<button id="click">click</button>
+<button id="addClass">addClass</button>
+<button id="removeClass">removeClass</button>
+<button id="fade">fade</button>
+<button id="ajax">ajax</button>
+<div id="output"></div>
+<script type="text/javascript" src="src/svan-min.js"></script>
+<script type="text/javascript">
+
+var $l = (function alias() { 
+    var a = localStorage;
+    return {
+        clear : function() { return a.clear(); },
+        get   : function(k) { return a.getItem(k); },
+        rem   : function(k) { return a.removeItem(k); },
+        set   : function(k, v) { return a.setItem(k, v); }
+    };
+}());
+
+var $j = (function alias() { 
+    var a = JSON;
+    return {
+        str : function(o) { return a.stringify(o); },
+        obj : function(s) { return a.parse(s); }
+    };
+}());
+
+$(document).ready(function() {
+    var o = function(msg, c) {
+        msg += '<br/>';
+        $('#output').append(msg);
+        if (c) console.log(msg.replace(/\<br\/\>/g, '\n'));
+    }
+    o('on dom ready event<br/>', 1);
+    
+    $('#click').on('click', function(e) {
+        o('click click event<br/>context : #'+this.id);
+        console.log(e);
+        console.log(this);
+    });
+
+    $('#addClass').on('click', function(e) {
+        o('addClass click event<br/>context    : #'+this.id+'<br/>css before : '+this.className);
+          $(this).addClass('cssAdded');
+          o('css after  : '+this.className);
+    });
+
+    $('#removeClass').on('click', function(e) {
+        var n = $('#addClass').first();
+        o('removeClass event<br/>context : #'+this.id+'<br/>css before : '+n.className);
+        $(n).removeClass('cssAdded');
+        o('css after  : '+n.className);
+    });
+    
+    $('#fade').on('click', function(e) {
+        o('fade click event<br/>context : #'+this.id);
+        $('#output').fadeOut(600, function() {
+            o('end fade out');
+            $(this).fadeIn(1600, function() {
+                o('end fadeIn');
+            });
+        });
+    });
+
+    $('#ajax').on('click', function(e) {
+        o('ajax click event');
+        $.ajax({
+            url   : 'http://domain.dev/ajax-done',
+            async : true,
+            data  : { toto : "tata" },
+            done  : function(data) {
+                o('ajax done receiving data<br/>' + $j.str(data) +'<br/>');
+                o($j.str(xhr));
+            },
+            always : function(data) {
+                o('ajax always<br/>');
+            },
+            method : 'POST'
+        });
+
+        $.ajax({
+            url   : 'http://domain.dev/ajax-fail',
+            async : false,
+            fail  : function(data, xhr) {
+                o('ajax fail receiving data<br/>' + $j.str(data) +'<br/>');
+                o($j.str(xhr));
+            },
+            always : function(data) {
+                o('ajax always<br/>');
+            },
+            method : 'GET'
+        });
+
+    });
+
+});
+</script>
+</body>
+</html>

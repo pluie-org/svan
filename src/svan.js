@@ -12,13 +12,13 @@
 (function() {
 
     var is  = function(o, intent) { return typeof o == intent; },
-    isNone  = function(o) { return is(o, 'undefined'); },
-    isStr   = function(o) { return is(o, 'string'); },
-    isFunc  = function(o) { return is(o, 'function'); },
-    isObj   = function(o) { return is(o, 'object'); },
     Svan    = function (selector, context) {
         return new Svan.init(selector, context);
-    };
+    },
+    isNone  = Svan.isNone = function(o) { return is(o, 'undefined'); },
+    isStr   = Svan.isStr  = function(o) { return is(o, 'string'); },
+    isFunc  = Svan.isFunc = function(o) { return is(o, 'function'); },
+    isObj   = Svan.isObj  = function(o) { return is(o, 'object'); };
 
     Svan.prototype = {
         regsan       : function (v) {
@@ -130,10 +130,6 @@
             this.context.addEventListener('DOMContentLoaded', fn);
         }
     };
-    Svan.isNone  = isNone;
-    Svan.isStr   = isStr;
-    Svan.isObj   = isObj;
-    Svan.isFunc  = isFunc;
     Svan.eachObj = function(obj, fn, context) {
         for (var prop in obj) {
             if (obj.hasOwnProperty(prop)) {
@@ -168,7 +164,7 @@
         }
         xhr.send(qs);
     }
-    
+
     var init = Svan.init   = function(selector, context) {
         this.FADE_DURATION = 700;
         this.VERSION       = 0.4;

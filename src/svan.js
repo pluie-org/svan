@@ -42,40 +42,40 @@
         find         : function(s) {
             return this.found ? [].slice.call(this.list[0].querySelectorAll(s)) : [];
         },
-        foreach      : function(f) {
+        each      : function(f) {
             if (this.found) this.list.forEach(f);
         },
         // Living Standard cf https://w3c.github.io/DOM-Parsing/#innerhtml
         html         : function(data) {
             if (!data) return this.found ? this.list[0].innerHTML : ''; // assume uniq selector
-            else this.foreach(function(node) {
+            else this.each(function(node) {
                 node.innerHTML = data;
             });
         },
         append       : function(data) {
-            this.foreach(function(node) {
+            this.each(function(node) {
                 node.innerHTML += data;
             });
         },
         on           : function(type, fn, capture) {
-            this.foreach(function(node) {
+            this.each(function(node) {
                 node.addEventListener(type, fn, capture===true);
             });
         },
         val          : function(data) {
             if (!data) return this.found ? this.list[0].value : null; // assume uniq selector
-            else this.foreach(function(node) {
+            else this.each(function(node) {
                 node.value = data;
             });
         },
         attr         : function(key, value) {
             if (arguments.length == 1) return this.found ? this.list[0].getAttribute(key) : null; // assume uniq selector
-            else this.foreach(function(node) {
+            else this.each(function(node) {
                 node.setAttribute(key, value);
             });
         },
         toggle       : function(cssName) {
-            this.foreach(function(node) {
+            this.each(function(node) {
                 node.classList.toggle(cssName);
             });
         },
@@ -84,12 +84,12 @@
             return this.found ? this.list[0].contains(cssName) : this.found;
         },
         removeClass : function(cssName) {
-            this.foreach(function(node) {
+            this.each(function(node) {
                 if (node.classList.contains(cssName)) node.classList.toggle(cssName);
             });
         },
         addClass    : function(cssName) {
-            this.foreach(function(node) {
+            this.each(function(node) {
                 if (!node.classList.contains(cssName)) node.classList.toggle(cssName);
             });
         },

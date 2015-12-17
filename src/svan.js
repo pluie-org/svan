@@ -7,7 +7,7 @@
  * @version       : 0.4
  * @license       : MIT
  * @require       : html5
- * @desc          : Small Vanilla jQuery
+ * @desc          : Small vanilla jquery-like lib
  */
 (function() {
 
@@ -18,7 +18,9 @@
     isNone  = Svan.isNone = function(o) { return is(o, 'undefined'); },
     isStr   = Svan.isStr  = function(o) { return is(o, 'string'); },
     isFunc  = Svan.isFunc = function(o) { return is(o, 'function'); },
-    isObj   = Svan.isObj  = function(o) { return is(o, 'object'); };
+    isObj   = Svan.isObj  = function(o) { return is(o, 'object'); },
+    isNode  = Svan.isNode = function(o) { return isObj(o) && !isNone(o.nodeType) ; },
+    isWin   = Svan.isWin  = function(o) { return isObj(o) && !isNone(o.window) && o.window == o; };
 
     Svan.prototype = {
         regsan       : function (v) {
@@ -170,7 +172,7 @@
         this.VERSION       = 0.4;
         this.context       = isNone(context) ? document : context;
         this.list          = isStr(selector) ? [].slice.call(this.context.querySelectorAll(selector)) 
-                                       : (isObj(selector) && !isNone(selector.nodeType) ? [selector] : []);
+                                             : ((isNode(selector) || isWin(selector)) ? [selector] : []);
         this.found         = this.list.length > 0;
         return this;
     };

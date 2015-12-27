@@ -40,7 +40,7 @@
         },
         // assume uniq selector
         find         : function(s) {
-            return this.found ? [].slice.call(this.list[0].querySelectorAll(s)) : [];
+            return this.found ? new Svan.init(s, this.list[0]) : new Svan.init('');
         },
         each      : function(f) {
             if (this.found) this.list.forEach(f);
@@ -56,6 +56,21 @@
             this.each(function(node) {
                 node.innerHTML += data;
             });
+        },
+        prepend      : function(data) {
+            if (this.found) { 
+                if (isStr(data) {
+                    var div = document.createElement('div');
+                    div.innerHTML = data;
+                    while(div.lastChild != null) {
+                        this.first().insertBefore(div.lastChild, this.first().firstChild);
+                    }
+                }
+                else {
+                    var div = isStr(data) ? document.createElement('div') : data;
+                    this.first().insertBefore(data, this.first().firstChild);
+                }
+            }
         },
         on           : function(type, fn, capture) {
             this.each(function(node) {
@@ -81,7 +96,7 @@
         },
         // assume uniq selector
         hasClass    : function(cssName) {
-            return this.found ? this.list[0].contains(cssName) : this.found;
+            return this.found ? this.list[0].classList.contains(cssName) : this.found;
         },
         removeClass : function(cssName) {
             this.each(function(node) {
@@ -148,10 +163,10 @@
         xhr.onreadystatechange = function(data) {
             if (this.readyState == 4) {
                 if(this.status==200) {
-                    if (isFunc(def.done)) def.done.call(def.context, data, this.responseText, this.statusText);
+                    if (isFunc(def.done)) def.done.call(def.context, this.responseText, this.status);
                 }
-                else if (isFunc(def.fail)) def.fail.call(def.context, data, this.responseText, this.statusText);
-                if (isFunc(def.always)) def.always.call(def.context, data, this.responseText, this.statusText);
+                else if (isFunc(def.fail)) def.fail.call(def.context, this.responseText, this.status);
+                if (isFunc(def.always)) def.always.call(def.context, this.responseText, this.status);
             }
         }
         if (!isNone(def.timeout) && def.async) xhr.timeout = def.timeout;

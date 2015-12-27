@@ -59,7 +59,7 @@
         },
         prepend      : function(data) {
             if (this.found) { 
-                if (isStr(data) {
+                if (isStr(data)) {
                     var div = document.createElement('div');
                     div.innerHTML = data;
                     while(div.lastChild != null) {

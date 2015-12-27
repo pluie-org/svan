@@ -51,14 +51,14 @@
 
 ### ajax (currently in dev)
 
-    s.ajax({
-        async   : ...,
-        url     : ...,
-        method  : ...,
-        data    : ...,
-        done    : ...,
-        fail    : ...,
-        always  : ...,
-        before  : ...,
-        timeout : ...,
+    $.ajax({
+        async   : bool,
+        url     : string,
+        method  : GET|POST,
+        data    : object,
+        done    : function,
+        fail    : function,
+        always  : function,
+        before  : function,
+        timeout : int,
     })

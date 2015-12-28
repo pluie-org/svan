@@ -78,15 +78,30 @@
             });
         },
         val          : function(data) {
-            if (!data) return this.found ? this.list[0].value : null; // assume uniq selector
+            if (!data) return this.found ? ( this.list[0].nodeName.toLowerCase() == 'select' ? this.list[0].options[this.list[0].selectedIndex].value : this.list[0].value) : null; // assume uniq selector
             else this.each(function(node) {
-                node.value = data;
+                if (node.nodeName.toLowerCase() == 'select') {
+                    for(var i=0, lim = node.options.length; i < lim; i++) {
+                        if (node.options[i].value == data) {
+                            node.options[i].selected = true;
+                            break;
+                        }
+                    }
+                }
+                else {
+                    node.value = data;
+                }
             });
         },
         attr         : function(key, value) {
-            if (arguments.length == 1) return this.found ? this.list[0].getAttribute(key) : null; // assume uniq selector
+            if (arguments.length == 1) return this.found ? ( key == "disabled" ? this.list[0].disabled : this.list[0].getAttribute(key)) : null; // assume uniq selector
             else this.each(function(node) {
-                node.setAttribute(key, value);
+                if (key == "disabled") {
+                    node.disabled = value;
+                }
+                else {
+                    node.setAttribute(key, value);
+                }
             });
         },
         toggle       : function(cssName) {
@@ -184,7 +199,7 @@
 
     var init = Svan.init   = function(selector, context) {
         this.FADE_DURATION = 700;
-        this.VERSION       = 0.4;
+        this.VERSION       = 0.5;
         this.context       = isNone(context) ? document : context;
         this.list          = isStr(selector) ? [].slice.call(this.context.querySelectorAll(selector)) 
                                              : ((isNode(selector) || isWin(selector)) ? [selector] : []);
